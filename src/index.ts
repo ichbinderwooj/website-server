@@ -1,5 +1,6 @@
 import express from 'express';
 import { database } from './database';
+import { logRequest } from './middleware/log';
 
 database
   .initialize()
@@ -11,10 +12,12 @@ database
 const app = express();
 const PORT = 8002;
 
+app.use(logRequest);
+
 app.get('/', (req, res) => {
   res.send('Hello world!');
 });
 
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+  console.log(`${new Date()}: Listening on port ${PORT}`);
 });
