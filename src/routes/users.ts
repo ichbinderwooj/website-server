@@ -67,11 +67,9 @@ router.post('/', async (req, res) => {
   }
 
   const usernameCheck = await User.findOne({
-    where: [
-      {
-        username: req.body.username,
-      },
-    ],
+    where: {
+      username: req.body.username,
+    },
   });
 
   if (usernameCheck) {
@@ -82,11 +80,9 @@ router.post('/', async (req, res) => {
   }
 
   const emailCheck = await User.findOne({
-    where: [
-      {
-        email: req.body.email,
-      },
-    ],
+    where: {
+      email: req.body.email,
+    },
   });
 
   if (emailCheck) {
@@ -123,11 +119,9 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const user = await User.findOne({
-    where: [
-      {
-        id: parseInt(req.params.id),
-      },
-    ],
+    where: {
+      id: parseInt(req.params.id),
+    },
     select: ['id', 'username', 'createdAt', 'description', 'permission'],
   });
   res.status(200).json(user);
