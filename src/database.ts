@@ -9,7 +9,7 @@ export const database = new DataSource({
   username: mysql.username,
   password: mysql.password,
   database: mysql.database,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [User],
   subscribers: [],
