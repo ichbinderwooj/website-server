@@ -25,6 +25,12 @@ app.get('/', (req, res) => {
   });
 });
 
+app.all('/teapot', (req, res) => {
+  res.status(418).json({
+    message: "I'm a teapot!",
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`${new Date()}: Listening on port ${PORT}`);
 });
