@@ -8,7 +8,7 @@
     "prestart": "npm run build",
     "build": "webpack",
     "prebuild": "npm run format",
-    "format": "prettier --write ."
+    "format": "prettier --write ./src"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,9 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mysql2": "^2.3.3",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.11"
   }
 }
