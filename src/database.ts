@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { User } from './entity/user';
 import { mysql } from '../config.json';
 
 export const database = new DataSource({
@@ -10,7 +11,7 @@ export const database = new DataSource({
   database: mysql.database,
   synchronize: true,
   logging: false,
-  entities: [],
+  entities: [User],
   subscribers: [],
   migrations: [],
 });

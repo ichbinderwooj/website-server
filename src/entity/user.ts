@@ -1,7 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Timestamp,
+} from 'typeorm';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,7 +22,7 @@ export class User {
   })
   password: string;
 
-  @Column()
+  @Column('timestamp')
   createdAt: Timestamp;
 
   @Column('text')
