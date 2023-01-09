@@ -4,6 +4,7 @@ import express, { json } from 'express';
 import { sign } from 'jsonwebtoken';
 import { database } from './database';
 import { logRequest } from './middleware/log';
+import { authenticate } from './middleware/auth';
 import users from './routes/users';
 import { User } from './entity/user';
 import { jwt } from '../config.json';
@@ -20,6 +21,7 @@ const PORT = 8002;
 
 app.use(json());
 app.use(logRequest);
+app.use(authenticate);
 
 app.use('/users', users);
 
@@ -40,7 +42,7 @@ app.post('/login', async (req, res) => {
     where: {
       email: req.body.email,
     },
-    select: ['id', 'email', 'password'],
+    select: ['id', 'email', 'password', 'permission'],
   });
 
   if (!user) {
@@ -57,7 +59,10 @@ app.post('/login', async (req, res) => {
     return;
   }
 
-  const accessToken = sign({ id: user.id }, jwt.accessTokenSecret);
+  const accessToken = sign(
+    { id: user.id, permission: user.permission },
+    jwt.accessTokenSecret
+  );
 
   res.status(200).json({
     accessToken,
