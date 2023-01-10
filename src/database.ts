@@ -11,7 +11,7 @@ export const database = new DataSource({
   password: mysql.password,
   database: mysql.database,
   synchronize: false,
-  logging: true,
+  logging: false,
   entities: [User],
   subscribers: [],
   migrations: [UserMigration],
