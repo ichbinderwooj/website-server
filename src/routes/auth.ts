@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { sign } from 'jsonwebtoken';
 import { User } from '../entity/user';
 import { jwt } from '../../config.json';
+import { redisDB } from '../database';
 
 const router = Router();
 
@@ -34,6 +35,12 @@ router.post('/login', async (req, res) => {
     { expiresIn: '20m' }
   );
   const refreshToken = sign({ id: user.id }, jwt.refreshTokenSecret);
+
+  await redisDB.connect();
+  await redisDB.set(`rtokens:${refreshToken}`, refreshToken, {
+    EX: 60 * 60 * 24 * 30,
+  });
+  await redisDB.disconnect();
 
   res.status(200).json({
     accessToken,
