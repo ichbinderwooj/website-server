@@ -24,14 +24,20 @@ app.use('/auth', auth);
 app.use('/users', users);
 
 app.get('/', (req, res) => {
-  res.status(200).json({
+  return res.status(200).json({
     message: 'Hello world!',
   });
 });
 
 app.all('/teapot', (req, res) => {
-  res.status(418).json({
+  return res.status(418).json({
     message: "I'm a teapot!",
+  });
+});
+
+app.all('*', (req, res) => {
+  return res.status(404).json({
+    message: 'Not found.',
   });
 });
 

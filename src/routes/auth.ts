@@ -16,17 +16,15 @@ router.post('/login', async (req, res) => {
   });
 
   if (!user) {
-    res.status(404).json({
+    return res.status(404).json({
       message: 'A user with the specified E-Mail address does not exist.',
     });
-    return;
   }
 
   if (!compareSync(req.body.password, user.password)) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'The specified password is incorrect.',
     });
-    return;
   }
 
   const accessToken = sign(
@@ -42,7 +40,7 @@ router.post('/login', async (req, res) => {
   });
   await redisDB.disconnect();
 
-  res.status(200).json({
+  return res.status(200).json({
     accessToken,
     refreshToken,
   });
