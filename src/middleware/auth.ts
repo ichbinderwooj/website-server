@@ -14,7 +14,7 @@ export async function authenticate(
     const token = authHeader.split(' ')[1];
 
     try {
-      var jwtData = verify(token, jwt.accessTokenSecret) as JwtPayload;
+      let jwtData = verify(token, jwt.accessTokenSecret) as JwtPayload;
       req.user = { id: jwtData.id, permission: jwtData.permission };
     } catch (err) {
       // catch

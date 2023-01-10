@@ -1,6 +1,6 @@
 import { compareSync } from 'bcrypt';
 import { Router } from 'express';
-import { sign } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { User } from '../entity/user';
 import { jwt } from '../../config.json';
 import { redisDB } from '../database';
@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
   const accessToken = sign(
     { id: user.id, permission: user.permission },
     jwt.accessTokenSecret,
-    { expiresIn: '20m' }
+    { expiresIn: '29m' }
   );
   const refreshToken = sign({ id: user.id }, jwt.refreshTokenSecret);
 
@@ -45,6 +45,38 @@ router.post('/login', async (req, res) => {
   res.status(200).json({
     accessToken,
     refreshToken,
+  });
+});
+
+router.post('/token', async (req, res) => {
+  await redisDB.connect();
+  const refreshToken = await redisDB.get(`rtokens:${req.body.refreshToken}`);
+  await redisDB.disconnect();
+  if (!refreshToken) {
+    return res.status(401).json({
+      message: 'You are not logged in.',
+    });
+  }
+
+  let user: { id: number; permission: number };
+
+  try {
+    let jwtData = verify(refreshToken, jwt.refreshTokenSecret) as JwtPayload;
+    user = { id: jwtData.id, permission: jwtData.permission };
+  } catch (err) {
+    return res.status(403).json({
+      message: 'Invalid refresh token.',
+    });
+  }
+
+  const accessToken = sign(
+    { id: user.id, permission: user.permission },
+    jwt.accessTokenSecret,
+    { expiresIn: '20m' }
+  );
+
+  res.status(200).json({
+    accessToken,
   });
 });
 
