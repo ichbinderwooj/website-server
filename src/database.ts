@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { User } from './entity/user';
+import { UserMigration } from './migration/user-migration';
 import { mysql } from '../config.json';
 
 export const database = new DataSource({
@@ -10,8 +11,8 @@ export const database = new DataSource({
   password: mysql.password,
   database: mysql.database,
   synchronize: false,
-  logging: false,
+  logging: true,
   entities: [User],
   subscribers: [],
-  migrations: [],
+  migrations: [UserMigration],
 });
