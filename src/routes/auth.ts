@@ -48,6 +48,13 @@ router.post('/login', async (req, res) => {
   });
 });
 
+router.delete('/logout', async (req, res) => {
+  await redisDB.connect();
+  await redisDB.del(`rtokens:${req.body.refreshToken}`);
+  await redisDB.disconnect();
+  return res.status(204).json({});
+});
+
 router.post('/token', async (req, res) => {
   await redisDB.connect();
   const refreshToken = await redisDB.get(`rtokens:${req.body.refreshToken}`);

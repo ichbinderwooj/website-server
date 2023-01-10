@@ -1,6 +1,7 @@
 import { genSalt, hash } from 'bcrypt';
 import { Router } from 'express';
 import { User } from '../entity/user';
+import { UserRequest } from '../interfaces/user-request';
 
 const router = Router();
 
@@ -117,12 +118,16 @@ router.post('/', async (req, res) => {
   res.status(201).json(outputUser);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req: UserRequest, res) => {
   const user = await User.findOne({
     where: {
       id: parseInt(req.params.id),
     },
-    select: ['id', 'username', 'createdAt', 'description', 'permission'],
+    select:
+      req.user &&
+      (req.user.id == parseInt(req.params.id) || req.user.permission >= 9)
+        ? ['id', 'username', 'email', 'createdAt', 'description', 'permission']
+        : ['id', 'username', 'createdAt', 'description', 'permission'],
   });
   res.status(200).json(user);
 });
