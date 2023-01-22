@@ -120,6 +120,10 @@ router.get('/:id', async (req: UserRequest, res) => {
         ? ['id', 'username', 'email', 'createdAt', 'description', 'permission']
         : ['id', 'username', 'createdAt', 'description', 'permission'],
   });
+  if (!user)
+    return res.status(404).json({
+      message: 'This user does not exist.',
+    });
   return res.status(200).json(user);
 });
 
